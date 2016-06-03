@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="apm"
+            type="com.example.sino.apm_test.ApmViewModel"/>
+        <import type="android.view.View"/>
+    </data>
+
+<ScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.sino.apm_test.MainActivity"
+
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+
+    android:id="@+id/scrollView">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target IP:" />
+
+                <EditText
+                    android:text="@={apm.targetIP}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="High Pass Filter"
+                    android:checked="@={apm.highPassFilter}"
+                    android:enabled="@{apm.start?false:true}"
+                    />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="speech Intelligibility Enhance"
+                    android:checked="@={apm.speechIntelligibilityEnhance}"
+                    android:enabled="@{apm.start?false:true}"
+                    />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Beam Forming"
+                    android:checked="@={apm.beamForming}"
+                    android:enabled="false"
+                    />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <RadioGroup android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AEC_PC"
+                    android:checked="@={apm.aecPC}"
+                    android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AEC_Mobile"
+                        android:checked="@={apm.aecMobile}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AEC_None"
+                        android:checked="@={apm.aecNone}"
+                        android:enabled="@{apm.start?false:true}"/>
+                </RadioGroup>
+            </TableRow>
+
+
+            <TableRow android:visibility="@{apm.aecPC?View.VISIBLE:View.GONE}">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AEC Extend Filter"
+                    android:checked="@={apm.aecExtendFilter}"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delay Agnostic"
+                    android:checked="@={apm.delayAgnostic}"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next Generation Aec"
+                    android:checked="@={apm.nextGenerationAEC}"/>
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp"
+                      android:visibility="@{((apm.aecPC &amp;&amp; !apm.delayAgnostic)||apm.aecMobile)?View.VISIBLE:View.GONE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AEC Buffer Delay(ms):" />
+
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:ems="3"
+                    android:text="@={apm.bufferDelay}"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp"
+                      android:visibility="@{!apm.aecNone?View.VISIBLE:View.GONE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AEC Mode：" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:visibility="@{apm.aecPC?View.VISIBLE:View.GONE}">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LowSuppression"
+                        android:checked="@={apm.aecPCMode0}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ModerateSuppression"
+                        android:checked="@={apm.aecPCMode1}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HighSuppression"
+                        android:checked="@={apm.aecPCMode2}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                </RadioGroup>
+
+                <RadioGroup android:visibility="@{apm.aecMobile?View.VISIBLE:View.GONE}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QuietEarpieceOrHeadset"
+                        android:checked="@={apm.aecMobileMode0}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Earpiece"
+                        android:checked="@={apm.aecMobileMode1}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LoudEarpiece"
+                        android:checked="@={apm.aecMobileMode2}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Speakerphone"
+                        android:checked="@={apm.aecMobileMode3}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LoudSpeakerphone"
+                        android:checked="@={apm.aecMobileMode4}"
+                        android:enabled="@{apm.start?false:true}"/>
+
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NS"
+                    android:checked="@={apm.ns}"
+                    android:enabled="@{apm.start?false:true}"/>
+
+                <CheckBox android:visibility="@{apm.ns?View.VISIBLE:View.GONE}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Experimental NS"
+                    android:checked="@={apm.experimentalNS}"
+                    android:enabled="@{apm.start?false:true}"/>
+            </TableRow>
+
+            <TableRow android:visibility="@{apm.ns?View.VISIBLE:View.GONE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NS Mode：" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={apm.nsMode0}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:text="Low" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={apm.nsMode1}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:text="Moderate" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{apm.start?false:true}"
+                    android:checked="@={apm.nsMode2}"
+                    android:text="High" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={apm.nsMode3}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:text="VeryHigh" />
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AGC"
+                    android:checked="@={apm.agc}"
+                    android:enabled="@{apm.start?false:true}"/>
+
+                <CheckBox android:visibility="@{apm.agc?View.VISIBLE:View.GONE}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Experimental Agc"
+                    android:checked="@={apm.experimentalAGC}"
+                    android:enabled="@{apm.start?false:true}"/>
+            </TableRow>
+
+            <TableRow android:visibility="@{apm.agc?View.VISIBLE:View.GONE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AGC Mode：" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@={apm.agcMode0}"
+                        android:enabled="@{apm.start?false:true}"
+                        android:text="AdaptiveAnalog" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@={apm.agcMode1}"
+                        android:enabled="@{apm.start?false:true}"
+                        android:text="AdaptiveDigital"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@={apm.agcMode2}"
+                        android:enabled="@{apm.start?false:true}"
+                        android:text="FixedDigital"/>
+                </RadioGroup>
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp" android:visibility="@{apm.agc?View.VISIBLE:View.GONE}">
+                <TextView android:text="AGC Target Level [0-31]:"/>
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:ems="3"
+                    android:text="@={apm.targetLevel}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:hint="please input agc target level"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp" android:visibility="@{apm.agc?View.VISIBLE:View.GONE}">
+                <TextView android:text="compression gain [0-90]:"/>
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:ems="3"
+                    android:text="@={apm.compressionGain}"
+                    android:enabled="@{apm.start?false:true}"
+                    android:hint="please input compression gain"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VAD"
+                    android:checked="@={apm.vad}"/>
+                <CheckBox android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="Speaker"
+                          android:enabled="@{!apm.start}"
+                          android:onClick="@{apm::onSpeaker}"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{apm.rcvCount}"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{apm.sndCount}"/>
+            </TableRow>
+
+            <TableRow android:layout_marginTop="10dp">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{apm.start?"Stop":"Start"}'
+                    android:onClick="@{apm::onStart}"
+                    android:layout_column="1"/>
+            </TableRow>
+
+        </TableLayout>
+    </HorizontalScrollView>
+</ScrollView>
+</layout>
